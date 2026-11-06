@@ -1,0 +1,66 @@
+@{
+    var routeController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    var routeAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+    var panelGoster = User.Identity?.IsAuthenticated == true && !(routeController == "Account" && (routeAction == "Login" || routeAction == "Register"));
+    var gezinme = SayfaGezinme.Olustur(User, routeController, routeAction, ViewData["Title"]?.ToString() ?? "Sayfa");
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - StajTakipWeb</title>
+    <link rel="icon" type="image/svg+xml" href="~/images/stajtakip-logo.svg" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/StajTakipWeb.styles.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="@ViewData["BodyClass"] @(panelGoster ? "has-workspace" : "")">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Panel" asp-action="Index"><partial name="_Brand" /></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Panel" asp-action="Index">Panelim</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="SifreDegistir">Şifre değiştir</a></li>
+                        }
+                    </ul>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="d-flex align-items-center gap-3">
+                            <span class="text-muted small">@User.Identity.Name</span>
+                            <button type="submit" class="btn btn-outline-secondary btn-sm">Çıkış yap</button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container @(panelGoster ? "workspace-shell" : "")">
+        <main role="main" class="pb-3 workspace-main" id="ana-icerik">
+            @if (panelGoster) { <partial name="_SayfaYolu" model="gezinme" /> }
+            @RenderBody()
+        </main>
+        @if (panelGoster) { <partial name="_SagPanel" model="gezinme" /> }
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; @DateTime.Now.Year · StajTakipWeb · Staj Yönetim Sistemi
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+

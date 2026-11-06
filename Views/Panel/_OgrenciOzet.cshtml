@@ -1,0 +1,21 @@
+@model OgrenciPanelModel
+@{
+    var bekleyen = Model.Odevler.Where(x => x.TeslimTarihi == null && x.SonTeslim.Date >= DateTime.Today).ToList();
+    var yaklasan = bekleyen.Where(x => x.SonTeslim.Date <= DateTime.Today.AddDays(7)).ToList();
+    var duzeltmeler = Model.Raporlar.Where(x => x.Durum == "Reddedildi").ToList();
+    var taslaklar = Model.Raporlar.Count(x => x.Durum == "Taslak");
+    var teslim = Model.Odevler.Count(x => x.TeslimTarihi != null);
+}
+<div class="row g-4 mb-4">
+<section class="col-lg-7"><div class="surface h-100"><div class="d-flex justify-content-between align-items-center gap-2 mb-3"><h2 class="h5 mb-0">Sıradaki adımların</h2><span class="status">Bugün · @DateTime.Today.ToString("dd.MM.yyyy")</span></div>
+@if (Model.Staj == null) { <a class="action-row" asp-controller="OgrenciPanel" asp-action="Staj"><span><strong>Staj bilgilerini tamamla</strong><small>Günlük rapor yazmaya başlamak için firma ve tarihlerini ekle.</small></span><span aria-hidden="true">→</span></a> }
+@if (taslaklar > 0) { <a class="action-row" asp-controller="OgrenciPanel" asp-action="Defter"><span><strong>@taslaklar taslak raporun var</strong><small>Yarım kalan çalışmalarını tamamlayıp onaya gönder.</small></span><span aria-hidden="true">→</span></a> }
+@foreach (var rapor in duzeltmeler.Take(3)) { <a class="action-row" asp-controller="OgrenciPanel" asp-action="Rapor" asp-route-id="@rapor.Id"><span><strong>Düzeltme bekliyor: @rapor.Baslik</strong><small>Yönetici geri bildirimine göre düzenleyip yeniden gönder.</small></span><span class="badge bg-warning text-dark">Düzelt</span></a> }
+@if (Model.Staj != null && taslaklar == 0 && duzeltmeler.Count == 0) { <p class="text-muted mb-0">Raporlarında bekleyen bir düzeltme yok. Bugünkü çalışmalarını defterine ekleyebilirsin.</p> }
+<div class="mt-4"><div class="d-flex justify-content-between small mb-2"><strong>Ödev teslim ilerlemen</strong><span>@teslim / @Model.Odevler.Count teslim</span></div><progress class="task-progress" value="@teslim" max="@Math.Max(1, Model.Odevler.Count)" aria-label="Teslim edilen ödevler">@teslim / @Model.Odevler.Count</progress></div>
+</div></section>
+<section class="col-lg-5"><div class="surface h-100"><h2 class="h5 mb-3">Yaklaşan teslimler</h2><p class="text-muted small">Bugün ve önümüzdeki 7 gün içinde teslim edilecek ödevlerin.</p>
+@if (yaklasan.Count == 0) { <p class="text-muted mb-0">Önümüzdeki 7 gün için bekleyen teslimin yok.</p> }
+@foreach (var odev in yaklasan.Take(4)) { var gun = (odev.SonTeslim.Date - DateTime.Today).Days; <a class="action-row" asp-controller="OgrenciPanel" asp-action="Odev" asp-route-id="@odev.Id"><span><strong>@odev.Baslik</strong><small>@odev.SonTeslim.ToString("dd.MM.yyyy")</small></span><span class="status @(gun == 0 ? "deadline-today" : "")">@(gun == 0 ? "Bugün son gün" : gun + " gün kaldı")</span></a> }
+<a asp-controller="OgrenciPanel" asp-action="Odevler" class="feature-link d-inline-block mt-3">Tüm ödevlerim →</a>
+</div></section></div>

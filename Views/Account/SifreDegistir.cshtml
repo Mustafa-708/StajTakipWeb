@@ -1,0 +1,7 @@
+@model SifreDegistirForm
+@{ ViewData["Title"] = "Şifre Değiştir"; }
+<nav class="student-nav"><a asp-controller="Panel" asp-action="Index">← Panelime dön</a></nav>
+<div class="page-heading"><span class="eyebrow">HESAP AYARLARI</span><h1>Şifreni değiştir</h1><p>Yeni şifreni belirlemek için mevcut şifreni doğrula.</p></div>
+@if (TempData["SuccessMessage"] is string message) { <div class="alert alert-success" role="status">@message</div> }
+<div class="row"><div class="col-lg-6"><form method="post" class="surface"><div asp-validation-summary="All" class="text-danger" role="alert"></div><label asp-for="MevcutSifre" class="form-label"></label><input asp-for="MevcutSifre" class="form-control" autocomplete="current-password" /><label asp-for="YeniSifre" class="form-label mt-3"></label><input asp-for="YeniSifre" class="form-control" autocomplete="new-password" /><label asp-for="YeniSifreTekrar" class="form-label mt-3"></label><input asp-for="YeniSifreTekrar" class="form-control" autocomplete="new-password" /><p class="small text-muted mt-3">En az 8 karakter, bir büyük harf, bir küçük harf ve bir rakam kullan. Diğer cihazlardaki eski oturumların kapatılır.</p><button type="submit" class="btn btn-primary">Şifremi güncelle</button></form></div></div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

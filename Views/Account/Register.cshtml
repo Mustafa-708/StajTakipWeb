@@ -1,0 +1,51 @@
+@model StajTakipWeb.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "Hesap Oluştur";
+    ViewData["BodyClass"] = "login-page register-page login-centered";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+}
+<div class="login-shell login-centered-shell">
+    <section class="login-form-panel" aria-labelledby="register-title">
+        <div class="login-form-content">
+            <span class="form-kicker">ÖĞRENCİ KAYDI</span>
+            <h2 id="register-title">Yeni bir başlangıç.</h2>
+            <p class="login-subtitle">Bilgilerini tamamla, staj yolculuğuna katıl.</p>
+            <form asp-controller="Account" asp-action="Register" method="post">
+                <div asp-validation-summary="ModelOnly" class="login-errors" role="alert"></div>
+                <fieldset class="register-group"><legend><span>01</span> Kişisel bilgiler</legend>
+                    <div class="register-grid">
+                        <div class="login-field"><label asp-for="Ad">Ad</label><div class="login-input-wrap"><input asp-for="Ad" autocomplete="given-name" placeholder="Adın" aria-describedby="ad-error" /></div><span asp-validation-for="Ad" class="login-field-error" id="ad-error"></span></div>
+                        <div class="login-field"><label asp-for="Soyad">Soyad</label><div class="login-input-wrap"><input asp-for="Soyad" autocomplete="family-name" placeholder="Soyadın" aria-describedby="soyad-error" /></div><span asp-validation-for="Soyad" class="login-field-error" id="soyad-error"></span></div>
+                    </div>
+                </fieldset>
+                <fieldset class="register-group"><legend><span>02</span> Okul bilgileri</legend>
+                    <div class="login-field"><label asp-for="Numara">Öğrenci numarası</label><div class="login-input-wrap"><input asp-for="Numara" placeholder="Öğrenci numaran" aria-describedby="numara-error" /></div><span asp-validation-for="Numara" class="login-field-error" id="numara-error"></span></div>
+                    <div class="register-grid register-school-grid">
+                        <div class="login-field"><label asp-for="Bolum">Bölüm</label><div class="login-input-wrap"><input asp-for="Bolum" placeholder="Bölümün" aria-describedby="bolum-error" /></div><span asp-validation-for="Bolum" class="login-field-error" id="bolum-error"></span></div>
+                        <div class="login-field"><label asp-for="Sinif">Sınıf</label><select asp-for="Sinif" class="register-select" aria-describedby="sinif-error"><option value="">Seçiniz</option>@for (var i = 9; i <= 12; i++) { <option value="@i">@i. sınıf</option> }</select><span asp-validation-for="Sinif" class="login-field-error" id="sinif-error"></span></div>
+                    </div>
+                </fieldset>
+                <fieldset class="register-group"><legend><span>03</span> Hesap bilgileri</legend>
+                    <div class="register-grid">
+                        <div class="login-field"><label asp-for="UserName">Kullanıcı adı</label><div class="login-input-wrap"><input asp-for="UserName" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Bir kullanıcı adı seç" aria-describedby="username-error" /></div><span asp-validation-for="UserName" class="login-field-error" id="username-error"></span></div>
+                        <div class="login-field"><label asp-for="Email">E-posta</label><div class="login-input-wrap"><input asp-for="Email" type="email" autocomplete="email" placeholder="ornek@eposta.com" aria-describedby="email-error" /></div><span asp-validation-for="Email" class="login-field-error" id="email-error"></span></div>
+                        <div class="login-field"><label asp-for="Password">Şifre</label><div class="login-input-wrap"><input asp-for="Password" autocomplete="new-password" placeholder="Şifreni oluştur" aria-describedby="password-hint password-error" /><button type="button" class="password-toggle" aria-label="Şifreyi göster" aria-pressed="false" aria-controls="Password" hidden><span aria-hidden="true">◉</span></button></div><span asp-validation-for="Password" class="login-field-error" id="password-error"></span></div>
+                        <div class="login-field"><label asp-for="ConfirmPassword">Şifre tekrarı</label><div class="login-input-wrap"><input asp-for="ConfirmPassword" autocomplete="new-password" placeholder="Şifreni tekrar gir" aria-describedby="confirm-error" /><button type="button" class="password-toggle" aria-label="Şifre tekrarını göster" aria-pressed="false" aria-controls="ConfirmPassword" hidden><span aria-hidden="true">◉</span></button></div><span asp-validation-for="ConfirmPassword" class="login-field-error" id="confirm-error"></span></div>
+                    </div>
+                    <p id="password-hint" class="password-hint">Şifren en az 8 karakter, bir büyük harf, bir küçük harf ve bir rakam içermeli.</p>
+                </fieldset>
+                <button type="submit" class="login-submit">Hesabımı oluştur <span aria-hidden="true">→</span></button>
+            </form>
+            <div class="register-prompt">Zaten hesabın var mı? <a asp-controller="Account" asp-action="Login">Giriş yap <span aria-hidden="true">↗</span></a></div>
+        </div>
+        <div class="login-copyright">© @DateTime.Now.Year StajTakipWeb</div>
+    </section>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/login.js" asp-append-version="true"></script>
+}
+
+

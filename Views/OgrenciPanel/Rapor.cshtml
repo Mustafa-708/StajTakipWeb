@@ -1,0 +1,12 @@
+@model StajRaporu
+@{ ViewData["Title"] = "Günlük Rapor"; var editable = Model.Durum == "Taslak" || Model.Durum == "Reddedildi"; }
+<partial name="_Nav" />
+<div class="page-heading"><span class="eyebrow">STAJ DEFTERİ</span><h1>@(Model.Id == 0 ? "Yeni günlük rapor" : "Günlük rapor")</h1><p>Yaptığın işleri, kullandığın araçları ve öğrendiklerini anlat.</p></div>
+@if (editable) {
+@if (!string.IsNullOrWhiteSpace(Model.Degerlendirme)) { <div class="alert alert-warning"><strong>Düzeltme için geri bildirim</strong><p class="mb-0 report-content">@Model.Degerlendirme</p><p class="small mt-2 mb-0">Raporunu düzenleyip yeniden onaya gönderebilirsin.</p></div> }
+<form method="post" asp-route-id="@(Model.Id == 0 ? (int?)null : Model.Id)" class="surface"><div asp-validation-summary="All" class="text-danger"></div><div class="row g-3"><div class="col-md-4"><label asp-for="Tarih" class="form-label"></label><input asp-for="Tarih" class="form-control" /><span asp-validation-for="Tarih" class="text-danger"></span></div><div class="col-md-8"><label asp-for="Baslik" class="form-label"></label><input asp-for="Baslik" class="form-control" placeholder="Örn. Veritabanı tasarımı ve tablo ilişkileri" /><span asp-validation-for="Baslik" class="text-danger"></span></div><div class="col-12"><label asp-for="Icerik" class="form-label"></label><textarea asp-for="Icerik" class="form-control" rows="12" placeholder="Bugün hangi görevler üzerinde çalıştın? Neler öğrendin?"></textarea><span asp-validation-for="Icerik" class="text-danger"></span></div></div><p class="text-muted small mt-3">Taslak ve reddedilen raporlar düzenlenebilir. Onay bekleyen ve onaylanmış raporlar değiştirilemez.</p><div class="d-flex gap-2 flex-wrap"><button type="submit" name="islem" value="taslak" class="btn btn-outline-primary">Taslak kaydet</button><button type="submit" name="islem" value="gonder" class="btn btn-primary">Onaya gönder</button><a asp-action="Defter" class="btn btn-light">Vazgeç</a></div></form>
+} else {
+<article class="surface"><span class="status">@Model.Durum</span><p class="text-muted mt-3">@Model.Tarih?.ToString("dd.MM.yyyy")</p><h2 class="h4">@Model.Baslik</h2><div class="report-content">@Model.Icerik</div><hr /><h3 class="h6">Sorumlu değerlendirmesi</h3><p>@(Model.Degerlendirme ?? "Henüz değerlendirme eklenmedi.")</p><a asp-action="Defter">← Staj defterine dön</a></article>
+}
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
+

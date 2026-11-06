@@ -1,0 +1,4 @@
+@model SayfaGezinme
+<nav aria-label="Sayfa yolu" class="page-breadcrumb"><a asp-controller="Panel" asp-action="Index">@Model.Rol paneli</a>
+@if (Model.Aktif != null && Model.Aktif.Baslik != Model.Baslik) { <span aria-hidden="true">/</span><a asp-controller="@Model.Aktif.Controller" asp-action="@Model.Aktif.Action">@Model.Aktif.Baslik</a> }
+<span aria-hidden="true">/</span><span aria-current="page">@Model.Baslik</span></nav>

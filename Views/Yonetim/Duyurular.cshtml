@@ -1,0 +1,15 @@
+@model DuyuruForm
+@{ ViewData["Title"] = "Duyuru Yönetimi"; }
+<partial name="_Nav" />
+<div class="page-heading"><span class="eyebrow">İLETİŞİM</span><h1>Duyuru panosu</h1><p>Stajla ilgili hatırlatmaları ve bilgilendirmeleri tüm öğrencilere ulaştır.</p></div>
+<div class="row g-4"><div class="col-lg-5"><form method="post" class="surface"><h2 class="h5 mb-4">Yeni duyuru</h2><div asp-validation-summary="All" class="text-danger" role="alert"></div><label asp-for="Baslik" class="form-label"></label><input asp-for="Baslik" class="form-control" placeholder="Örn. Haftalık rapor hatırlatması" /><label asp-for="Icerik" class="form-label mt-3"></label><textarea asp-for="Icerik" class="form-control" rows="7"></textarea><label asp-for="Bitis" class="form-label mt-3"></label><input asp-for="Bitis" class="form-control" /><p class="small text-muted mt-3">Duyuru öğrenci panelinde görünür. Son gün belirtilirse o günün sonunda görünümden kalkar.</p><button type="submit" class="btn btn-primary">Duyuruyu yayımla</button></form></div>
+<div class="col-lg-7"><section class="surface"><h2 class="h5 mb-4">Yayımlananlar ve arşiv</h2>
+@if (!Model.Kayitlar.Any()) { <p class="text-muted mb-0">Henüz duyuru oluşturulmadı.</p> }
+@foreach(var item in Model.Kayitlar) {
+    var suresiDoldu = item.Bitis?.Date < DateTime.Today;
+    <article class="announcement-item"><div class="d-flex justify-content-between align-items-start gap-3"><h3 class="h6">@item.Baslik</h3><span class="status">@(suresiDoldu ? "Süresi doldu" : item.YayindaMi ? "Yayında" : "Arşivde")</span></div><small class="text-muted">@item.YayinTarihi.ToString("dd.MM.yyyy HH:mm")@if (item.Bitis.HasValue) { <span> · Son gün: @item.Bitis.Value.ToString("dd.MM.yyyy")</span> }</small><div class="report-content">@item.Icerik</div>
+    @if (item.YayindaMi || !suresiDoldu) { <form method="post" asp-action="DuyuruYayini" asp-route-id="@item.Id" class="mt-3"><input type="hidden" name="yayindaMi" value="@(!item.YayindaMi ? "true" : "false")" /><button type="submit" class="btn btn-sm btn-outline-secondary">@(item.YayindaMi ? "Arşive al" : "Yeniden yayımla")</button></form> }
+    </article>
+}
+</section></div></div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

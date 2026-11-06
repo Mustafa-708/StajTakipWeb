@@ -1,0 +1,8 @@
+@model List<StajRaporu>
+@{ ViewData["Title"] = "Değerlendirmelerim"; }
+<partial name="_Nav" />
+<div class="page-heading"><span class="eyebrow">RAPOR TAKİBİ</span><h1>Değerlendirmelerim</h1><p>Onaya gönderdiğin raporlar ve staj sorumlusunun geri bildirimleri.</p></div>
+<section class="surface">
+@if (!Model.Any()) { <div class="empty-state"><span>✅</span><h2 class="h5">Henüz değerlendirmeye gönderilen rapor yok</h2><p>Staj defterindeki bir taslağı tamamlayıp onaya gönderdiğinde burada görebilirsin.</p><a asp-action="Defter" class="btn btn-outline-primary">Staj defterine git</a></div> }
+else { foreach (var rapor in Model) { <div class="evaluation-item"><div class="d-flex justify-content-between gap-3"><h2 class="h6"><a asp-action="Rapor" asp-route-id="@rapor.Id">@rapor.Baslik</a></h2><span class="status">@rapor.Durum</span></div><small class="text-muted">@rapor.Tarih?.ToString("dd.MM.yyyy")</small><p class="mt-2 mb-0">@(rapor.Degerlendirme ?? "Raporunuz staj sorumlusunun değerlendirmesini bekliyor.")</p></div> } }
+</section>

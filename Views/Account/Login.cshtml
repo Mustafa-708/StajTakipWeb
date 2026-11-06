@@ -1,0 +1,45 @@
+@model StajTakipWeb.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Giriş Yap";
+    ViewData["BodyClass"] = "login-page login-centered login-premium";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/login-premium.css" asp-append-version="true" />
+}
+<div class="auth-page">
+    <a class="auth-brand" asp-controller="Account" asp-action="Login" aria-label="StajTakipWeb giriş"><partial name="_Brand" /></a>
+    <div class="login-shell auth-card">
+        <section class="login-form-panel" aria-labelledby="login-title">
+            <div class="login-form-content">
+                <div class="auth-intro"><span class="auth-kicker"><span aria-hidden="true"></span> HESABINA GİRİŞ YAP</span><span class="auth-lock" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="10" width="14" height="11" rx="4"/><path d="M8 10V6a4 4 0 0 1 8 0v4"/><path d="M12 14v3"/></svg></span></div>
+                <h1 id="login-title">Tekrar hoş geldin<span>.</span></h1>
+                <p class="login-subtitle">Stajına kaldığın yerden devam et.</p>
+                @if (TempData["SuccessMessage"] is string message) { <div class="alert alert-success" role="status">@message</div> }
+                <form asp-controller="Account" asp-action="Login" method="post">
+                    <div asp-validation-summary="ModelOnly" class="login-errors" role="alert"></div>
+                    <div class="login-field">
+                        <label asp-for="UserName">Kullanıcı adı</label>
+                        <div class="login-input-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 21v-3a7 7 0 0 1 14 0v3"/></svg><input asp-for="UserName" autocomplete="username" placeholder="Kullanıcı adını yaz" spellcheck="false" autocapitalize="none" aria-describedby="username-error" /></div>
+                        <span asp-validation-for="UserName" id="username-error" class="login-field-error"></span>
+                    </div>
+                    <div class="login-field">
+                        <label asp-for="Password">Şifre</label>
+                        <div class="login-input-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V6a4 4 0 0 1 8 0v4"/><path d="M12 14v3"/></svg><input asp-for="Password" autocomplete="current-password" placeholder="Şifreni yaz" aria-describedby="password-error caps-lock-warning" /><button type="button" class="password-toggle" aria-label="Şifreyi göster" aria-pressed="false" aria-controls="Password" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/><path class="eye-slash" d="m3 3 18 18"/></svg></button></div>
+                        <span asp-validation-for="Password" id="password-error" class="login-field-error"></span>
+                        <span id="caps-lock-warning" class="caps-lock-warning" role="status" hidden>Caps Lock açık.</span>
+                    </div>
+                    <div class="login-options"><label class="remember-option"><input asp-for="RememberMe" /><span>Beni hatırla</span></label><span class="login-option-note">Kişisel cihazında kullan</span></div>
+                    <button type="submit" class="login-submit">Giriş yap <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                </form>
+            </div>
+        </section>
+        <div class="auth-register"><span>Henüz hesabın yok mu?</span><a asp-controller="Account" asp-action="Register">Hesap oluştur <span aria-hidden="true">↗</span></a></div>
+    </div>
+    <div class="auth-bottom"><p>Öğrenci · Staj sorumlusu · Yönetici</p><small>© @DateTime.Now.Year StajTakipWeb</small></div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/login.js" asp-append-version="true"></script>
+    <script src="~/js/login-premium.js" asp-append-version="true"></script>
+}

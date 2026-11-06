@@ -1,0 +1,80 @@
+
+@model StajTakipWeb.Models.Ogrenci
+
+@{
+    ViewData["Title"] = "Yeni Öğrenci";
+}
+
+<div class="container mt-4">
+    <h2>Yeni Öğrenci Ekle</h2>
+
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger"></div>
+
+        <div class="mb-3">
+            <label asp-for="Numara" class="form-label">
+                Öğrenci Numarası
+            </label>
+            <input asp-for="Numara" class="form-control" />
+            <span asp-validation-for="Numara"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Ad" class="form-label"></label>
+            <input asp-for="Ad" class="form-control" />
+            <span asp-validation-for="Ad"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Soyad" class="form-label"></label>
+            <input asp-for="Soyad" class="form-control" />
+            <span asp-validation-for="Soyad"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Bolum" class="form-label">
+                Bölüm
+            </label>
+            <input asp-for="Bolum" class="form-control" />
+            <span asp-validation-for="Bolum"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Sinif" class="form-label">
+                Sınıf
+            </label>
+            <input asp-for="Sinif" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Telefon" class="form-label">
+                Telefon
+            </label>
+            <input asp-for="Telefon" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Eposta" class="form-label">
+                E-posta
+            </label>
+            <input asp-for="Eposta" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            Öğrenciyi Kaydet
+        </button>
+
+        <a asp-action="Index" class="btn btn-secondary">
+            Geri Dön
+        </a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

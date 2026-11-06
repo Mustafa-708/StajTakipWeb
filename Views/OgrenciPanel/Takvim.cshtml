@@ -1,0 +1,16 @@
+@model TakvimModel
+@using System.Globalization
+@{ ViewData["Title"] = "Teslim Takvimim"; var tr = CultureInfo.GetCultureInfo("tr-TR"); var onceki = Model.Ay.AddMonths(-1); var sonraki = Model.Ay.AddMonths(1); }
+<partial name="_Nav" />
+<div class="page-heading"><span class="eyebrow">PLANLAMA</span><h1>Teslim takvimim</h1><p>Ödevlerinin son teslim tarihlerini aylık olarak gör.</p></div>
+<section class="surface"><div class="calendar-toolbar"><h2 class="h4 mb-0">@Model.Ay.ToString("MMMM yyyy", tr)</h2><div class="d-flex gap-2 flex-wrap">@if (onceki.Year >= 2000) { <a asp-action="Takvim" asp-route-yil="@onceki.Year" asp-route-ay="@onceki.Month" class="btn btn-outline-secondary btn-sm" aria-label="Önceki ay">← Önceki</a> }<a asp-action="Takvim" class="btn btn-light btn-sm">Bu ay</a>@if (sonraki.Year <= 2100) { <a asp-action="Takvim" asp-route-yil="@sonraki.Year" asp-route-ay="@sonraki.Month" class="btn btn-outline-secondary btn-sm" aria-label="Sonraki ay">Sonraki →</a> }</div></div>
+<div class="calendar-scroll"><div class="calendar-grid" role="list" aria-label="@Model.Ay.ToString("MMMM yyyy", tr) teslim günleri">
+@foreach(var gun in new[] { "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz" }) { <div class="calendar-weekday" aria-hidden="true">@gun</div> }
+@for(var i = 0; i < Model.BaslangicBosluk; i++) { <div class="calendar-blank" aria-hidden="true"></div> }
+@for(var gun = 1; gun <= Model.GunSayisi; gun++) {
+    var tarih = Model.Ay.AddDays(gun - 1); var odevler = Model.Odevler.Where(x => x.SonTeslim.Date == tarih).ToList();
+    <div class="calendar-day @(tarih == DateTime.Today ? "calendar-today" : "")" role="listitem" aria-label="@tarih.ToString("dd MMMM yyyy", tr)"><span class="calendar-day-number">@gun</span>@foreach(var odev in odevler) { <a asp-action="Odev" asp-route-id="@odev.Id" class="calendar-task @(odev.TeslimTarihi.HasValue ? "calendar-submitted" : "")" title="@odev.Baslik — @odev.Durum">@odev.Baslik<span>@odev.Durum</span></a> }</div>
+}
+</div></div>
+<p class="text-muted small mt-3 mb-0">Yeşil kartlar teslim edilmiş ödevleri gösterir. Tarihler son teslim günüdür.</p></section>
+<section class="surface mt-4"><h2 class="h5 mb-3">Bu ayın teslim listesi</h2>@if (!Model.Odevler.Any()) { <p class="text-muted mb-0">Bu ay için atanmış bir teslim bulunmuyor.</p> }@foreach(var odev in Model.Odevler) { <a class="action-row" asp-action="Odev" asp-route-id="@odev.Id"><span><strong>@odev.Baslik</strong><small>@odev.SonTeslim.ToString("dd.MM.yyyy")</small></span><span class="status">@odev.Durum</span></a> }</section>

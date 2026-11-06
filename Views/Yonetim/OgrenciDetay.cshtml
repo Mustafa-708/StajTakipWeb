@@ -1,0 +1,27 @@
+@model OgrenciDetayModel
+@{ ViewData["Title"] = "Öğrenci Detayı"; }
+<partial name="_Nav" />
+<div class="student-hero"><div><span class="eyebrow">ÖĞRENCİ DOSYASI</span><h1>@Model.Ogrenci.Ad @Model.Ogrenci.Soyad</h1><p>@Model.Ogrenci.Numara · @Model.Ogrenci.Bolum · @(Model.Ogrenci.Sinif?.ToString() ?? "—"). sınıf</p></div><a asp-action="OdevAta" asp-route-ogrenciId="@Model.Ogrenci.OgrenciID" class="btn btn-light">+ Ödev ata</a></div>
+<div class="row g-4"><div class="col-lg-4">
+<section class="surface mb-4"><h2 class="h5">Hesap ve erişim</h2>
+@if (Model.Hesap == null) { <p class="text-muted mb-0">Bu öğrenciye bağlı giriş hesabı bulunmuyor.</p> }
+else {
+<p class="mt-3"><span class="badge @(Model.Hesap.AktifMi ? "bg-success" : "bg-danger")">@(Model.Hesap.AktifMi ? "Aktif hesap" : "Pasif hesap")</span></p><p><strong>@Model.Hesap.UserName</strong><br />@Model.Hesap.Email</p><p class="small text-muted">Son giriş: @(Model.Hesap.SonGiris?.ToString("dd.MM.yyyy HH:mm") ?? "Henüz kayıt yok")</p>
+@if (!string.IsNullOrWhiteSpace(Model.Hesap.HesapNotu)) { <p class="small report-content">Hesap notu: @Model.Hesap.HesapNotu</p> }
+<form asp-action="HesapDurumu" asp-route-id="@Model.Ogrenci.OgrenciID" method="post"><input type="hidden" name="AktifMi" value="@(!Model.Hesap.AktifMi ? "true" : "false")" /><label for="Aciklama" class="form-label">@(Model.Hesap.AktifMi ? "Pasife alma nedeni" : "Aktifleştirme notu (isteğe bağlı)")</label><textarea id="Aciklama" name="Aciklama" rows="3" maxlength="500" required="@Model.Hesap.AktifMi" class="form-control"></textarea><p class="small text-muted mt-2">@(Model.Hesap.AktifMi ? "Pasif hesap giriş yapamaz. Açık oturumları sonraki istekte sonlandırılır. Öğrencinin kayıtları korunur." : "Aktifleştirme sonrası öğrenci yeniden giriş yapabilir.")</p><button class="btn @(Model.Hesap.AktifMi ? "btn-outline-danger" : "btn-success") w-100" type="submit">@(Model.Hesap.AktifMi ? "Hesabı pasife al" : "Hesabı aktifleştir")</button></form>
+<form asp-action="OturumKapat" asp-route-id="@Model.Ogrenci.OgrenciID" method="post" class="mt-3"><button class="btn btn-outline-secondary w-100" type="submit">Tüm oturumlarını kapat</button></form>
+}
+</section>
+<section class="surface"><h2 class="h5">Staj bilgileri</h2>@if (Model.Staj == null) { <p class="text-muted">Staj bilgileri henüz eklenmedi.</p> } else { <p class="mt-3"><strong>@Model.Staj.FirmaAdi</strong></p><p>@Model.Staj.FirmaAdresi</p><p class="small">@Model.Staj.Baslangic?.ToString("dd.MM.yyyy") — @Model.Staj.Bitis?.ToString("dd.MM.yyyy")</p><p class="small text-muted mb-0">Sorumlu: @Model.Staj.SorumluAdi<br />@Model.Staj.SorumluEposta</p> }</section>
+</div><div class="col-lg-8">
+<section class="surface mb-4"><h2 class="h5 mb-3">Ödevler <span class="text-muted">(@Model.Odevler.Count)</span></h2>@if (!Model.Odevler.Any()) { <p class="text-muted">Henüz ödev atanmadı.</p> } else { foreach(var odev in Model.Odevler) { <div class="report-row"><div><a asp-action="Incele" asp-route-id="@odev.Id">@odev.Baslik</a><small>Son teslim: @odev.SonTeslim.ToString("dd.MM.yyyy") · Not: @(odev.Not?.ToString() ?? "—")</small></div><span class="status">@odev.Durum</span></div> } }</section>
+<section class="surface"><h2 class="h5 mb-3">Staj raporları <span class="text-muted">(@Model.Raporlar.Count)</span></h2>
+@if (!Model.Raporlar.Any()) { <p class="text-muted">Henüz günlük rapor yok.</p> }
+@foreach(var rapor in Model.Raporlar) {
+<details class="evaluation-item"><summary><strong>@rapor.Baslik</strong> <span class="status">@rapor.Durum</span><small class="d-block text-muted mt-2">@rapor.Tarih?.ToString("dd.MM.yyyy")</small></summary><div class="report-content">@rapor.Icerik</div>
+@if (rapor.Durum == "Taslak") { <p class="text-muted small mt-3">Öğrenci bu raporu henüz değerlendirmeye göndermedi.</p> }
+else { <form method="post" asp-action="RaporKarari" asp-route-id="@rapor.Id" class="mt-3"><label for="karar-@rapor.Id" class="form-label">Karar</label><select id="karar-@rapor.Id" name="Durum" class="form-select" required><option value="">Karar seçin</option><option value="Onaylandı">Onayla</option><option value="Reddedildi">Reddet</option></select><label for="yorum-@rapor.Id" class="form-label mt-3">Geri bildirim</label><textarea id="yorum-@rapor.Id" name="GeriBildirim" class="form-control" rows="3" maxlength="4000" required>@rapor.Degerlendirme</textarea><button class="btn btn-primary mt-3" type="submit">Kararı kaydet</button></form> }
+</details>
+}
+</section></div></div>
+

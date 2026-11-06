@@ -1,0 +1,9 @@
+@model List<StajRaporu>
+@{ ViewData["Title"] = "Staj Defterim"; }
+<partial name="_Nav" />
+<div class="page-heading d-flex justify-content-between align-items-center flex-wrap gap-3"><div><span class="eyebrow">GÜNLÜK ÇALIŞMALAR</span><h1>Staj defterim</h1><p class="mb-0">Çalışmalarını kaydet, raporlarını değerlendirmeye gönder.</p></div><a asp-action="Rapor" class="btn btn-primary">+ Yeni günlük rapor</a></div>
+<section class="surface">
+@if (!Model.Any()) { <div class="empty-state"><span>📖</span><h2 class="h5">Defterinin ilk sayfası seni bekliyor</h2><p>Staj bilgilerini kaydettikten sonra gün içinde yaptığın çalışmaları ekleyebilirsin.</p><a asp-action="Rapor" class="btn btn-outline-primary">İlk raporumu yaz</a></div> }
+else { <div class="table-responsive"><table class="table align-middle"><thead><tr><th>Tarih</th><th>Çalışma başlığı</th><th>Durum</th><th><span class="visually-hidden">İşlem</span></th></tr></thead><tbody>@foreach(var rapor in Model) { <tr><td>@rapor.Tarih?.ToString("dd.MM.yyyy")</td><td>@rapor.Baslik</td><td><span class="status">@rapor.Durum</span></td><td><a asp-action="Rapor" asp-route-id="@rapor.Id">@(rapor.Durum == "Reddedildi" ? "Düzelt ve gönder" : rapor.Durum == "Taslak" ? "Düzenle" : "Görüntüle")</a></td></tr> }</tbody></table></div> }
+</section>
+

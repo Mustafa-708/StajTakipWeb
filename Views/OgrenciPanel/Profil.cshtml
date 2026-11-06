@@ -1,0 +1,14 @@
+@model ProfilForm
+@{ ViewData["Title"] = "Kişisel Bilgilerim"; }
+<partial name="_Nav" />
+<div class="page-heading"><span class="eyebrow">ÖĞRENCİ PROFİLİ</span><h1>Kişisel bilgilerim</h1><p>Öğrenci kaydın ve iletişim bilgilerin.</p></div>
+<div class="row g-4"><div class="col-lg-7"><section class="surface"><h2 class="h5 mb-4">Öğrenci bilgileri</h2><dl class="profile-grid">
+<dt>Ad soyad</dt><dd>@Model.Ogrenci?.Ad @Model.Ogrenci?.Soyad</dd>
+<dt>Öğrenci numarası</dt><dd>@Model.Ogrenci?.Numara</dd>
+<dt>Bölüm</dt><dd>@Model.Ogrenci?.Bolum</dd>
+<dt>Sınıf</dt><dd>@(Model.Ogrenci?.Sinif?.ToString() ?? "Belirtilmedi")</dd>
+<dt>E-posta</dt><dd>@Model.Eposta</dd>
+<dt>Kayıt tarihi</dt><dd>@Model.Ogrenci?.KayitTarihi.ToString("dd.MM.yyyy")</dd>
+</dl><p class="text-muted small mb-0">Öğrenci bilgilerinde hata varsa okulunuzun staj sorumlusuyla iletişime geçin.</p></section></div>
+<div class="col-lg-5"><form method="post" class="surface"><h2 class="h5 mb-3">İletişim bilgilerim</h2><div asp-validation-summary="All" class="text-danger"></div><label asp-for="Telefon" class="form-label"></label><input asp-for="Telefon" class="form-control" autocomplete="tel" placeholder="05xx xxx xx xx" /><span asp-validation-for="Telefon" class="text-danger"></span><button class="btn btn-primary mt-4" type="submit">Değişiklikleri kaydet</button></form></div></div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

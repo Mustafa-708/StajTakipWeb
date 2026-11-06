@@ -1,0 +1,11 @@
+@{ var seciliDurum = ViewData["Durum"]?.ToString(); }
+<form method="get" class="d-flex flex-wrap gap-2 mb-4" aria-label="Ödev filtreleri">
+<label for="odev-ara" class="visually-hidden">Ödev ara</label><input id="odev-ara" name="ara" value="@ViewData["Ara"]" class="form-control flex-grow-1 w-auto" placeholder="Ödev başlığı ara" />
+<label for="odev-durum" class="visually-hidden">Ödev durumu</label><select id="odev-durum" name="durum" class="form-select w-auto">
+<option value="">Tüm durumlar</option>
+<option value="bekliyor" selected="@(seciliDurum == "bekliyor")">Teslim bekleyen</option>
+<option value="geciken" selected="@(seciliDurum == "geciken")">Süresi geçen</option>
+<option value="teslim" selected="@(seciliDurum == "teslim")">Değerlendirme bekleyen</option>
+<option value="degerlendirilen" selected="@(seciliDurum == "degerlendirilen")">Değerlendirilen</option>
+</select><button type="submit" class="btn btn-primary">Filtrele</button><a href="@Url.Action(ViewContext.RouteData.Values["action"]?.ToString())" class="btn btn-light">Temizle</a>
+</form>

@@ -1,0 +1,31 @@
+@model OdevForm
+@{ ViewData["Title"] = "Ödev Ata"; }
+<partial name="_Nav" />
+<div class="page-heading"><span class="eyebrow">YENİ GÖREV</span><h1>Öğrencilere ödev ata</h1><p>Bir veya birden fazla öğrenci seç ya da aynı ödevi tüm öğrencilere ata.</p></div>
+<form method="post" class="surface">
+<div asp-validation-summary="All" class="text-danger" role="alert"></div>
+<div class="row g-4">
+<div class="col-md-8">
+<fieldset><legend class="form-label">Öğrenciler</legend>
+<label class="assignment-select-all"><input asp-for="TumOgrenciler" class="form-check-input" /><span><strong>Tüm öğrencilere ata</strong><small>Kayıtlı @Model.Ogrenciler.Count öğrencinin tamamını kapsar.</small></span></label>
+<div class="assignment-students" id="ogrenci-secimi">
+@foreach (var ogrenci in Model.Ogrenciler) {
+<label class="assignment-student"><input type="checkbox" name="OgrenciIDleri" value="@ogrenci.OgrenciID" checked="@Model.OgrenciIDleri.Contains(ogrenci.OgrenciID)" class="form-check-input" /><span><strong>@ogrenci.Ad @ogrenci.Soyad</strong><small>@ogrenci.Numara · @ogrenci.Bolum</small></span></label>
+}
+@if (!Model.Ogrenciler.Any()) { <p class="text-muted p-3 mb-0">Henüz kayıtlı öğrenci bulunmuyor.</p> }
+</div>
+<span asp-validation-for="OgrenciIDleri" class="text-danger"></span>
+<p id="secim-ozeti" class="text-muted small mt-2" role="status" aria-live="polite">Seçmek istediğin öğrencileri işaretle.</p>
+</fieldset>
+</div>
+<div class="col-md-4"><label asp-for="SonTeslim" class="form-label"></label><input asp-for="SonTeslim" class="form-control" /></div>
+<div class="col-12"><label asp-for="Baslik" class="form-label"></label><input asp-for="Baslik" class="form-control" placeholder="Örn. Veritabanı tasarımı ve örnek sorgular" /></div>
+<div class="col-12"><label asp-for="Aciklama" class="form-label"></label><textarea asp-for="Aciklama" class="form-control" rows="8" placeholder="Yapılacak işler, kullanılacak araçlar ve teslim beklentileri…"></textarea></div>
+</div>
+<p class="text-muted small mt-3">Her öğrenciye ayrı ödev kaydı oluşturulur; teslim ve değerlendirmeler ayrı takip edilir. Son teslim günü sonuna kadar teslim kabul edilir.</p>
+<button type="submit" class="btn btn-primary">Ödevi ata</button><a asp-action="Index" class="btn btn-light">Vazgeç</a>
+</form>
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+<script src="~/js/odev-secimi.js" asp-append-version="true"></script>
+}

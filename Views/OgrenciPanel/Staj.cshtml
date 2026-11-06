@@ -1,0 +1,13 @@
+@model StajBilgisi
+@{ ViewData["Title"] = "Staj Bilgilerim"; }
+<partial name="_Nav" />
+<div class="page-heading"><span class="eyebrow">STAJ BİLGİLERİ</span><h1>Staj bilgilerim</h1><p>Çalıştığın firma ve staj dönemin için bilgileri tamamla.</p></div>
+<form method="post" class="surface"><div asp-validation-summary="All" class="text-danger"></div><h2 class="h5 mb-4">Firma ve sorumlu bilgileri</h2><div class="row g-3">
+<div class="col-md-6"><label asp-for="FirmaAdi" class="form-label"></label><input asp-for="FirmaAdi" class="form-control" /><span asp-validation-for="FirmaAdi" class="text-danger"></span></div>
+<div class="col-md-6"><label asp-for="FirmaAdresi" class="form-label"></label><input asp-for="FirmaAdresi" class="form-control" /><span asp-validation-for="FirmaAdresi" class="text-danger"></span></div>
+<div class="col-md-6"><label asp-for="SorumluAdi" class="form-label"></label><input asp-for="SorumluAdi" class="form-control" /><span asp-validation-for="SorumluAdi" class="text-danger"></span></div>
+<div class="col-md-6"><label asp-for="SorumluEposta" class="form-label"></label><input asp-for="SorumluEposta" class="form-control" /><span asp-validation-for="SorumluEposta" class="text-danger"></span></div>
+<div class="col-md-6"><label asp-for="Baslangic" class="form-label"></label><input asp-for="Baslangic" class="form-control" /><span asp-validation-for="Baslangic" class="text-danger"></span></div>
+<div class="col-md-6"><label asp-for="Bitis" class="form-label"></label><input asp-for="Bitis" class="form-control" /><span asp-validation-for="Bitis" class="text-danger"></span></div>
+</div><p class="text-muted small mt-3">Günlük raporlar bu tarih aralığında oluşturulur. Kayıt, okul onayı anlamına gelmez.</p><button class="btn btn-primary" type="submit">Staj bilgilerimi kaydet</button></form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

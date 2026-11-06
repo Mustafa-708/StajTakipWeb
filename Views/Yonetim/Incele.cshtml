@@ -1,0 +1,12 @@
+@model OdevIncelemeForm
+@{ ViewData["Title"] = "Ödev İnceleme"; var odev = Model.Odev!; }
+<partial name="_Nav" />
+<div class="page-heading"><span class="eyebrow">ÖDEV İNCELEME</span><h1>@odev.Baslik</h1><p>@odev.Ogrenci?.Ad @odev.Ogrenci?.Soyad · @odev.Ogrenci?.Numara · Son teslim: @odev.SonTeslim.ToString("dd.MM.yyyy")</p></div>
+<div class="row g-4"><div class="col-lg-8"><section class="surface"><span class="status">@odev.Durum</span><h2 class="h5 mt-4">Görev açıklaması</h2><div class="report-content">@odev.Aciklama</div><hr /><h2 class="h5">Öğrencinin çalışması</h2>
+@if (odev.TeslimTarihi.HasValue) { <p class="text-muted small">Teslim: @odev.TeslimTarihi.Value.ToString("dd.MM.yyyy HH:mm")</p><div class="report-content">@odev.TeslimMetni</div>@if (!string.IsNullOrWhiteSpace(odev.TeslimBaglantisi)) { <a href="@odev.TeslimBaglantisi" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary mt-3">Çalışma bağlantısını aç ↗</a> } }
+else { <p class="text-muted">Öğrenci henüz teslim yapmadı.</p> }
+</section></div><div class="col-lg-4"><section class="surface"><h2 class="h5">Değerlendirme</h2>
+@if (odev.TeslimTarihi.HasValue) { <form method="post" asp-route-id="@odev.Id"><div asp-validation-summary="All" class="text-danger"></div><label asp-for="Not" class="form-label mt-3"></label><input asp-for="Not" class="form-control" min="0" max="100" /><label asp-for="GeriBildirim" class="form-label mt-3"></label><textarea asp-for="GeriBildirim" class="form-control" rows="6"></textarea><button type="submit" class="btn btn-primary mt-3">Değerlendirmeyi kaydet</button></form> }
+else { <p class="text-muted small mb-0">Teslim yapıldıktan sonra not ve geri bildirim ekleyebilirsin.</p> }
+</section></div></div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

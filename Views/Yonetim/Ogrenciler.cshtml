@@ -1,0 +1,10 @@
+@model List<OgrenciYonetimSatiri>
+@{ ViewData["Title"] = "Öğrenciler"; }
+<partial name="_Nav" />
+<div class="page-heading"><span class="eyebrow">ÖĞRENCİ YÖNETİMİ</span><h1>Öğrenciler ve hesaplar</h1><p>Hesap erişimini yönet, staj sürecini incele ve görev ata.</p></div>
+<section class="surface"><form method="get" class="d-flex flex-wrap gap-2 mb-4"><label for="ara" class="visually-hidden">Öğrenci ara</label><input id="ara" name="ara" value="@ViewData["Ara"]" class="form-control flex-grow-1 w-auto" placeholder="Ad, soyad veya öğrenci numarası" /><label for="durum" class="visually-hidden">Hesap durumu</label><select id="durum" name="durum" class="form-select w-auto"><option value="">Tüm hesaplar</option><option value="aktif" selected="@(ViewData["Durum"]?.ToString() == "aktif")">Aktif hesaplar</option><option value="pasif" selected="@(ViewData["Durum"]?.ToString() == "pasif")">Pasif hesaplar</option></select><button class="btn btn-primary" type="submit">Filtrele</button><a asp-action="Ogrenciler" class="btn btn-light">Temizle</a></form>
+@if (!Model.Any()) { <p class="text-muted">Bu filtreye uygun öğrenci bulunamadı.</p> }
+else { <div class="table-responsive"><table class="table align-middle"><thead><tr><th>Öğrenci</th><th>Bölüm</th><th>Hesap durumu</th><th>Son giriş</th><th>İşlem</th></tr></thead><tbody>@foreach(var row in Model) { <tr><td><strong>@row.Ogrenci.Ad @row.Ogrenci.Soyad</strong><small class="d-block text-muted">@row.Ogrenci.Numara · @row.Hesap?.UserName</small></td><td>@row.Ogrenci.Bolum</td><td><span class="badge @(row.Hesap == null ? "bg-secondary" : row.Hesap.AktifMi ? "bg-success" : "bg-danger")">@(row.Hesap == null ? "Hesap bağlı değil" : row.Hesap.AktifMi ? "Aktif" : "Pasif")</span></td><td>@(row.Hesap?.SonGiris?.ToString("dd.MM.yyyy HH:mm") ?? "Kayıt yok")</td><td><a asp-action="OgrenciDetay" asp-route-id="@row.Ogrenci.OgrenciID">Detay ve yönetim →</a></td></tr> }</tbody></table></div> }
+<p class="text-muted small mb-0">Aktif/pasif bilgisi hesaba erişim iznini gösterir. Son giriş, öğrencinin şu anda çevrim içi olduğu anlamına gelmez.</p>
+</section>
+

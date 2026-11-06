@@ -1,0 +1,42 @@
+
+@model IEnumerable<StajTakipWeb.Models.Ogrenci>
+
+@{
+    ViewData["Title"] = "Öğrenciler";
+}
+
+<div class="container mt-4">
+    <h2>Öğrenci Yönetimi</h2>
+    
+<a asp-controller="Ogrenciler"
+   asp-action="Create"
+   class="btn btn-primary mb-3">
+    + Yeni Öğrenci Ekle
+</a>
+
+    <p>Kayıtlı öğrencilerin listesi</p>
+
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Numara</th>
+                <th>Ad</th>
+                <th>Soyad</th>
+                <th>Bölüm</th>
+                <th>Sınıf</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ogrenci in Model)
+            {
+                <tr>
+                    <td>@ogrenci.Numara</td>
+                    <td>@ogrenci.Ad</td>
+                    <td>@ogrenci.Soyad</td>
+                    <td>@ogrenci.Bolum</td>
+                    <td>@ogrenci.Sinif</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

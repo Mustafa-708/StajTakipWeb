@@ -1,0 +1,77 @@
+
+@{
+    ViewData["Title"] = "Staj Sorumlusu";
+}
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between
+                align-items-center mb-4">
+        <div>
+            <h2>📋 Staj Sorumlusu Paneli</h2>
+            <p class="text-muted">
+                Hoş geldiniz, @User.Identity?.Name
+            </p>
+        </div>
+
+        <form asp-controller="Account"
+              asp-action="Logout" method="post">
+            <button type="submit"
+                    class="btn btn-outline-danger">
+                Çıkış Yap
+            </button>
+        </form>
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5>👨‍🎓 Öğrenci Takibi</h5>
+                    <p>Staj yapan öğrencileri takip edin.</p>
+                    <span class="badge bg-secondary">
+                        Yakında
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5>📖 Günlük Raporlar</h5>
+                    <p>Staj defterlerini inceleyin.</p>
+                    <span class="badge bg-secondary">
+                        Yakında
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5>✅ Rapor Onayları</h5>
+                    <p>Raporları onaylayın veya reddedin.</p>
+                    <span class="badge bg-secondary">
+                        Yakında
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5>📊 Staj Değerlendirmeleri</h5>
+                    <p>Öğrenci performansını değerlendirin.</p>
+                    <span class="badge bg-secondary">
+                        Yakında
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

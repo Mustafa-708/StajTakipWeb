@@ -1,0 +1,15 @@
+@model YoneticiPanelModel
+@{ ViewData["Title"] = "Yönetici Paneli"; }
+<partial name="_Nav" />
+<div class="student-hero"><div><span class="eyebrow">YÖNETİM MERKEZİ</span><h1>Yönetici paneli</h1><p>Öğrencileri takip et, görev ver ve çalışmalarını değerlendir.</p></div><a asp-action="OdevAta" class="btn btn-light">+ Yeni ödev ata</a></div>
+<div class="row g-3 mb-4">
+<div class="col-6 col-lg-3"><a class="metric metric-link" asp-action="Ogrenciler"><span>Öğrenci</span><strong>@Model.OgrenciSayisi</strong><span class="metric-arrow" aria-hidden="true">↗</span></a></div>
+<div class="col-6 col-lg-3"><a class="metric metric-link" asp-action="Index" asp-fragment="odevler"><span>Atanan ödev</span><strong>@Model.Odevler.Count</strong><span class="metric-arrow" aria-hidden="true">↗</span></a></div>
+<div class="col-6 col-lg-3"><a class="metric metric-link" asp-action="Index" asp-route-durum="teslim" asp-fragment="odevler"><span>İnceleme bekleyen</span><strong>@Model.Odevler.Count(x => x.TeslimTarihi.HasValue && !x.Not.HasValue)</strong><span class="metric-arrow" aria-hidden="true">↗</span></a></div>
+<div class="col-6 col-lg-3"><a class="metric metric-link" asp-action="Index" asp-route-durum="degerlendirilen" asp-fragment="odevler"><span>Değerlendirilen</span><strong>@Model.Odevler.Count(x => x.Not.HasValue)</strong><span class="metric-arrow" aria-hidden="true">↗</span></a></div>
+</div>
+<partial name="_IsOzeti" model="Model" /><section class="surface" id="odevler"><h2 class="h5 mb-4">Ödev ve teslim takibi</h2><partial name="_OdevFiltreleri" />
+@if (!Model.FiltrelenenOdevler.Any()) { <div class="empty-state"><h3 class="h5">Gösterilecek ödev yok</h3><p>Seçili filtreye uygun ödev bulunamadı. Filtreleri temizleyebilir veya yeni ödev atayabilirsin.</p><a asp-action="OdevAta" class="btn btn-outline-primary">Ödev ata</a></div> }
+else { <div class="table-responsive"><table class="table align-middle"><thead><tr><th>Ödev</th><th>Öğrenci</th><th>Son teslim</th><th>Durum</th><th>Not</th><th>İşlem</th></tr></thead><tbody>@foreach(var item in Model.FiltrelenenOdevler) { <tr><td>@item.Baslik</td><td>@item.Ogrenci?.Ad @item.Ogrenci?.Soyad<small class="d-block text-muted">@item.Ogrenci?.Numara</small></td><td>@item.SonTeslim.ToString("dd.MM.yyyy")</td><td><span class="status">@item.Durum</span></td><td>@(item.Not?.ToString() ?? "—")</td><td><a asp-action="Incele" asp-route-id="@item.Id">İncele →</a></td></tr> }</tbody></table></div> }
+</section>
+

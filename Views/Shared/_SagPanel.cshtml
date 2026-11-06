@@ -1,0 +1,11 @@
+@model SayfaGezinme
+<aside class="workspace-sidebar" aria-label="Sayfa konumu ve gezinme">
+<details class="sidebar-disclosure" open><summary><span>Sayfalar ve konum</span><span class="sidebar-chevron" aria-hidden="true">⌄</span></summary><div class="sidebar-content">
+<div class="sidebar-location"><span class="eyebrow">ŞU AN BURADASIN</span><strong>@Model.Baslik</strong><small>@Model.Rol paneli</small></div>
+<nav class="sidebar-nav" aria-label="@Model.Rol sayfaları"><span class="sidebar-section-label">SAYFALAR</span>
+@foreach (var link in Model.Baglantilar) { var aktif = link == Model.Aktif;
+<a asp-controller="@link.Controller" asp-action="@link.Action" class="sidebar-link @(aktif ? "is-current" : "")" aria-current="@(aktif ? "page" : null)"><span class="sidebar-link-icon" aria-hidden="true">@link.Isaret</span><span>@link.Baslik</span>@if (aktif) { <span class="sidebar-current-dot" aria-hidden="true"></span> }</a>
+}
+</nav>
+<div class="sidebar-account"><span class="sidebar-avatar" aria-hidden="true">@(User.Identity?.Name?.FirstOrDefault().ToString().ToUpperInvariant() ?? "?")</span><div><strong>@User.Identity?.Name</strong><small>@Model.Rol hesabı</small></div></div>
+</div></details></aside>

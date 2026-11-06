@@ -1,0 +1,80 @@
+
+@{
+    ViewData["Title"] = "Yönetici Paneli";
+}
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between
+                align-items-center mb-4">
+        <div>
+            <h2>🛡️ Yönetici Paneli</h2>
+            <p class="text-muted">
+                Hoş geldiniz, @User.Identity?.Name
+            </p>
+        </div>
+
+        <form asp-controller="Account"
+              asp-action="Logout" method="post">
+            <button type="submit"
+                    class="btn btn-outline-danger">
+                Çıkış Yap
+            </button>
+        </form>
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5>👨‍🎓 Öğrenci Yönetimi</h5>
+                    <p>Öğrencileri listeleyin ve yönetin.</p>
+
+                    <a asp-controller="Ogrenciler"
+                       asp-action="Index"
+                       class="btn btn-primary">
+                        Öğrencileri Görüntüle
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5>🏢 Firma Yönetimi</h5>
+                    <p>Staj firmalarını yönetin.</p>
+                    <span class="badge bg-secondary">
+                        Yakında
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5>📅 Staj Yönetimi</h5>
+                    <p>Öğrenci ve firma eşleştirmeleri.</p>
+                    <span class="badge bg-secondary">
+                        Yakında
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5>⚙️ Kullanıcı ve Roller</h5>
+                    <p>Kullanıcı yetkilerini yönetin.</p>
+                    <span class="badge bg-secondary">
+                        Yakında
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

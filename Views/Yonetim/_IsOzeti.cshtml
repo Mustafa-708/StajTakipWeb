@@ -1,0 +1,11 @@
+@model YoneticiPanelModel
+<div class="row g-4 mb-4">
+<section class="col-lg-7"><div class="surface h-100"><h2 class="h5 mb-3">İşlem bekleyen raporlar <span class="status">@Model.BekleyenRaporlar.Count</span></h2><p class="small text-muted">En eski raporlar önce gösterilir.</p>
+@if (!Model.BekleyenRaporlar.Any()) { <p class="text-muted mb-0">Değerlendirme bekleyen rapor yok.</p> }
+@foreach (var rapor in Model.BekleyenRaporlar.Take(5)) { <a class="action-row" asp-action="OgrenciDetay" asp-route-id="@rapor.OgrenciID"><span><strong>@rapor.Baslik</strong><small>@rapor.Tarih?.ToString("dd.MM.yyyy") tarihli rapor</small></span><span aria-hidden="true">İncele →</span></a> }
+</div></section>
+<section class="col-lg-5"><div class="surface h-100"><h2 class="h5 mb-3">Takip özeti</h2>
+<a class="action-row" asp-action="Index" asp-route-durum="teslim"><span><strong>Notlandırılacak teslimler</strong><small>Öğrenciler değerlendirme bekliyor.</small></span><span class="status">@Model.Odevler.Count(x => x.TeslimTarihi != null && x.Not == null)</span></a>
+<a class="action-row" asp-action="Index" asp-route-durum="geciken"><span><strong>Süresi geçen ödevler</strong><small>Henüz teslim edilmemiş çalışmalar.</small></span><span class="status">@Model.Odevler.Count(x => x.TeslimTarihi == null && x.SonTeslim.Date < DateTime.Today)</span></a>
+<a class="action-row" asp-action="Ogrenciler" asp-route-durum="pasif"><span><strong>Pasif öğrenci hesapları</strong><small>Erişime kapalı hesapları görüntüle.</small></span><span class="status">@Model.PasifHesapSayisi</span></a>
+</div></section></div>
