@@ -80,6 +80,13 @@ h1 { font-size: clamp(1.7rem, 4vw, 2.2rem); font-weight: 700; letter-spacing: -.
 .task-progress::-moz-progress-bar { background: #3b8d74; border-radius: 8px; }
 .deadline-today { background: #fff1d6; color: #865600; }
 
+@keyframes notification-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, .08); } 50% { box-shadow: 0 0 0 7px rgba(37, 99, 235, .18); } }
+.notification-pulse { animation: notification-pulse 1.45s ease-in-out infinite; }
+.notification-pulse-task { border-color: #79a8df; }
+.notification-pulse-item { border-color: #79a8df; }
+.notification-dot { display: inline-block; width: 9px; height: 9px; margin-left: 6px; vertical-align: middle; border-radius: 50%; background: #e45a5a; animation: notification-pulse 1.1s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .notification-pulse, .notification-dot { animation: none; } }
+
 .metric-link { display: block; position: relative; text-decoration: none; color: #1e293b; cursor: pointer; transition: background-color .18s, border-color .18s, box-shadow .18s, transform .18s; }
 .metric-link:hover { color: #174f92; background: #edf4fe; border-color: #97b8e4; box-shadow: 0 8px 20px #193c5c12; transform: translateY(-3px); }
 .metric-link:focus-visible { outline: 3px solid #5389be; outline-offset: 4px; background: #edf4fe; }

@@ -1,11 +1,11 @@
 @model OgrenciPanelModel
-@{ ViewData["Title"] = "Öğrenci Paneli"; }
+@{ ViewData["Title"] = "Öğrenci Paneli"; var bekleyenOdevVar = Model.Odevler.Any(x => x.TeslimTarihi == null); }
 <div class="student-hero">
 <div><span class="eyebrow">STAJ TAKİP SİSTEMİ</span><h1>Merhaba, @Model.Ogrenci.Ad 👋</h1><p>Staj yolculuğunu buradan takip et, çalışmalarını kaydet.</p></div>
 <span class="student-chip">@Model.Ogrenci.Numara · @Model.Ogrenci.Bolum</span>
 </div>
 <div class="row g-3 mb-4">
-<div class="col-12"><div class="d-flex flex-wrap gap-2"><a asp-controller="OgrenciPanel" asp-action="Duyurular" class="btn btn-outline-primary">Duyurular <span class="badge bg-primary ms-1">@Model.OkunmamisDuyuruSayisi yeni</span></a><a asp-controller="OgrenciPanel" asp-action="Takvim" class="btn btn-outline-secondary">Teslim takvimim →</a></div></div>
+<div class="col-12"><div class="d-flex flex-wrap gap-2"><a asp-controller="OgrenciPanel" asp-action="Duyurular" class="btn btn-outline-primary @(Model.OkunmamisDuyuruSayisi > 0 ? "notification-pulse" : "")" aria-label="Duyurular, @Model.OkunmamisDuyuruSayisi okunmamış">Duyurular <span class="badge bg-primary ms-1">@Model.OkunmamisDuyuruSayisi yeni</span></a><a asp-controller="OgrenciPanel" asp-action="Takvim" class="btn btn-outline-secondary">Teslim takvimim →</a></div></div>
 <div class="col-6 col-lg-3"><div class="metric"><span>Firma</span><strong class="metric-text">@(Model.Staj?.FirmaAdi ?? "Henüz eklenmedi")</strong></div></div>
 <div class="col-6 col-lg-3"><div class="metric"><span>Toplam rapor</span><strong>@Model.Raporlar.Count</strong></div></div>
 <div class="col-6 col-lg-3"><div class="metric"><span>Onay bekleyen</span><strong>@Model.Raporlar.Count(x => x.Durum == "Onay bekliyor")</strong></div></div>
@@ -13,7 +13,7 @@
 </div>
 <partial name="_OgrenciOzet" model="Model" />
 <div class="row g-4">
-<div class="col-12"><a class="feature-card" asp-controller="OgrenciPanel" asp-action="Odevler"><h2>📋 Ödevlerim</h2><p>Yöneticinin atadığı görevleri görüntüle, çalışmalarını teslim et ve geri bildirimlerini takip et.</p><span class="feature-link">Ödevlerime git →</span></a></div>
+<div class="col-12"><a class="feature-card @(bekleyenOdevVar ? "notification-pulse notification-pulse-task" : "")" asp-controller="OgrenciPanel" asp-action="Odevler"><h2>📋 Ödevlerim @if (bekleyenOdevVar) { <span class="notification-dot" title="Teslim bekleyen ödev var" aria-label="Teslim bekleyen ödev var"></span> }</h2><p>Yöneticinin atadığı görevleri görüntüle, çalışmalarını teslim et ve geri bildirimlerini takip et.</p><span class="feature-link">Ödevlerime git →</span></a></div>
 @foreach (var item in new[] {
 new { Icon = "👤", Title = "Kişisel Bilgilerim", Text = "Öğrenci bilgilerini görüntüle, telefon numaranı güncelle.", Action = "Profil", Link = "Profilimi görüntüle" },
 new { Icon = "🏢", Title = "Staj Bilgilerim", Text = "Firmanı, işyeri sorumlunu ve staj tarihlerini kaydet.", Action = "Staj", Link = "Staj bilgilerimi düzenle" },
