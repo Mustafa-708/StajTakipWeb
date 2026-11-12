@@ -13,6 +13,7 @@ public class Odev
     public DateTime Olusturma { get; set; }
     public string? TeslimMetni { get; set; }
     public string? TeslimBaglantisi { get; set; }
+    public string? TeslimDosyasi { get; set; }
     public DateTime? TeslimTarihi { get; set; }
     public int? Not { get; set; }
     public string? GeriBildirim { get; set; }
@@ -31,6 +32,7 @@ public class TeslimForm
 {
     [Required(ErrorMessage = "Yaptığınız çalışmayı açıklayın."), StringLength(10000), Display(Name = "Çalışma açıklaması")] public string TeslimMetni { get; set; } = "";
     [StringLength(2000), Display(Name = "Çalışma bağlantısı (isteğe bağlı)")] public string? TeslimBaglantisi { get; set; }
+    [Display(Name = "Dosya (isteğe bağlı)")] public IFormFile? TeslimDosyasi { get; set; }
     public Odev? Odev { get; set; }
 }
 public class OdevIncelemeForm

@@ -52,6 +52,8 @@ public static class OgrenciPanelSchema
             );
             CREATE INDEX [IX_Odevler_OgrenciID] ON [dbo].[Odevler] ([OgrenciID]);
         END;
+        IF COL_LENGTH('dbo.Odevler', 'TeslimDosyasi') IS NULL
+            ALTER TABLE [dbo].[Odevler] ADD [TeslimDosyasi] nvarchar(500) NULL;
         IF OBJECT_ID(N'[dbo].[StajBilgileri]', N'U') IS NULL
         BEGIN
             CREATE TABLE [dbo].[StajBilgileri] (

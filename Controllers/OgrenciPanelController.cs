@@ -8,7 +8,7 @@ using StajTakipWeb.Models;
 namespace StajTakipWeb.Controllers;
 
 [Authorize(Roles = "Ogrenci")]
-public class OgrenciPanelController(StajTakipContext db, UserManager<ApplicationUser> users) : Controller
+public class OgrenciPanelController(StajTakipContext db, UserManager<ApplicationUser> users, IWebHostEnvironment environment) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Duyurular()
@@ -68,8 +68,20 @@ public class OgrenciPanelController(StajTakipContext db, UserManager<Application
         return odev == null ? NotFound() : View(new TeslimForm { Odev = odev });
     }
 
+    [HttpGet]
+    public async Task<IActionResult> OdevDosyasi(int id)
+    {
+        var ogrenci = await OgrenciAsync();
+        if (ogrenci == null) return NotFound();
+        var odev = await db.Odevler.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id && x.OgrenciID == ogrenci.OgrenciID);
+        if (odev?.TeslimDosyasi == null) return NotFound();
+        var path = Path.Combine(environment.WebRootPath, odev.TeslimDosyasi.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+        if (!System.IO.File.Exists(path)) return NotFound();
+        return PhysicalFile(path, "application/octet-stream", Path.GetFileName(path));
+    }
+
     [HttpPost, ValidateAntiForgeryToken]
-    public async Task<IActionResult> Odev(int id, [Bind("TeslimMetni,TeslimBaglantisi")] TeslimForm form)
+    public async Task<IActionResult> Odev(int id, [Bind("TeslimMetni,TeslimBaglantisi,TeslimDosyasi")] TeslimForm form)
     {
         var ogrenci = await OgrenciAsync();
         if (ogrenci == null) return NotFound();
@@ -78,6 +90,24 @@ public class OgrenciPanelController(StajTakipContext db, UserManager<Application
         if (odev.TeslimTarihi != null) return BadRequest("Bu ödev zaten teslim edildi.");
         if (odev.SonTeslim.Date < DateTime.Today) ModelState.AddModelError("", "Ödevin teslim süresi doldu.");
         if (!string.IsNullOrWhiteSpace(form.TeslimBaglantisi) && (!Uri.TryCreate(form.TeslimBaglantisi, UriKind.Absolute, out var uri) || (uri.Scheme != "http" && uri.Scheme != "https"))) ModelState.AddModelError("TeslimBaglantisi", "http veya https ile başlayan geçerli bir bağlantı girin.");
+        if (!ModelState.IsValid) { form.Odev = odev; return View(form); }
+        if (form.TeslimDosyasi is { Length: > 0 } file)
+        {
+            const long maxBytes = 10 * 1024 * 1024;
+            var allowed = new[] { ".pdf", ".doc", ".docx", ".zip", ".rar", ".png", ".jpg", ".jpeg" };
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+            if (file.Length > maxBytes) ModelState.AddModelError("TeslimDosyasi", "Dosya boyutu en fazla 10 MB olabilir.");
+            else if (!allowed.Contains(extension)) ModelState.AddModelError("TeslimDosyasi", "Bu dosya türü desteklenmiyor.");
+            else
+            {
+                var folder = Path.Combine(environment.WebRootPath, "uploads", "assignments", id.ToString());
+                Directory.CreateDirectory(folder);
+                var storedName = $"{Guid.NewGuid():N}{extension}";
+                await using var stream = System.IO.File.Create(Path.Combine(folder, storedName));
+                await file.CopyToAsync(stream);
+                odev.TeslimDosyasi = $"/uploads/assignments/{id}/{storedName}";
+            }
+        }
         if (!ModelState.IsValid) { form.Odev = odev; return View(form); }
         odev.TeslimMetni = form.TeslimMetni;
         odev.TeslimBaglantisi = form.TeslimBaglantisi;
