@@ -80,7 +80,7 @@ public class OgrenciPanelController(StajTakipContext db, UserManager<Application
         return PhysicalFile(path, "application/octet-stream", Path.GetFileName(path));
     }
 
-    [HttpPost, ValidateAntiForgeryToken]
+    [HttpPost, ValidateAntiForgeryToken, RequestSizeLimit(12_000_000)]
     public async Task<IActionResult> Odev(int id, [Bind("TeslimMetni,TeslimBaglantisi,TeslimDosyasi")] TeslimForm form)
     {
         var ogrenci = await OgrenciAsync();
@@ -100,12 +100,24 @@ public class OgrenciPanelController(StajTakipContext db, UserManager<Application
             else if (!allowed.Contains(extension)) ModelState.AddModelError("TeslimDosyasi", "Bu dosya türü desteklenmiyor.");
             else
             {
-                var folder = Path.Combine(environment.WebRootPath, "uploads", "assignments", id.ToString());
-                Directory.CreateDirectory(folder);
-                var storedName = $"{Guid.NewGuid():N}{extension}";
-                await using var stream = System.IO.File.Create(Path.Combine(folder, storedName));
-                await file.CopyToAsync(stream);
-                odev.TeslimDosyasi = $"/uploads/assignments/{id}/{storedName}";
+                try
+                {
+                    var folder = Path.Combine(environment.WebRootPath, "uploads", "assignments", id.ToString());
+                    Directory.CreateDirectory(folder);
+                    var storedName = $"{Guid.NewGuid():N}{extension}";
+                    var storedPath = Path.Combine(folder, storedName);
+                    await using var stream = System.IO.File.Create(storedPath);
+                    await file.CopyToAsync(stream);
+                    odev.TeslimDosyasi = $"/uploads/assignments/{id}/{storedName}";
+                }
+                catch (IOException)
+                {
+                    ModelState.AddModelError("TeslimDosyasi", "Dosya kaydedilemedi. Dosyayı kapatıp tekrar deneyin.");
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    ModelState.AddModelError("TeslimDosyasi", "Dosya klasörüne yazma izni yok. Yöneticiye bildirin.");
+                }
             }
         }
         if (!ModelState.IsValid) { form.Odev = odev; return View(form); }
