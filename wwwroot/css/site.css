@@ -85,7 +85,20 @@ h1 { font-size: clamp(1.7rem, 4vw, 2.2rem); font-weight: 700; letter-spacing: -.
 .notification-pulse-task { border-color: #79a8df; }
 .notification-pulse-item { border-color: #79a8df; }
 .notification-dot { display: inline-block; width: 9px; height: 9px; margin-left: 6px; vertical-align: middle; border-radius: 50%; background: #e45a5a; animation: notification-pulse 1.1s ease-in-out infinite; }
+.notification-center { display: flex; align-items: stretch; gap: 22px; margin: 22px 0 26px; padding: 17px 20px; border: 1px solid #b8d6f4; border-left: 4px solid #3e83c6; border-radius: 14px; background: linear-gradient(110deg, #f1f7ff, #fbfdff); box-shadow: 0 8px 24px rgba(34, 83, 130, .08); }
+.notification-center-heading { min-width: 175px; display: flex; flex-direction: column; justify-content: center; color: #204a76; }
+.notification-center-heading strong { font-size: .92rem; }
+.notification-center-heading small { margin-top: 4px; color: #7388a0; font-size: .72rem; }
+.notification-live-dot { width: 9px; height: 9px; margin-bottom: 8px; border-radius: 50%; background: #df6262; box-shadow: 0 0 0 5px #df62621c; animation: notification-pulse 1.1s ease-in-out infinite; }
+.notification-center-actions { display: flex; flex: 1; flex-wrap: wrap; gap: 10px; }
+.notification-center-link { display: flex; align-items: center; gap: 11px; flex: 1 1 220px; min-width: 0; padding: 11px 13px; border: 1px solid #d8e5f3; border-radius: 10px; background: #fff; color: #315779; text-decoration: none; transition: transform .15s, border-color .15s, box-shadow .15s; }
+.notification-center-link > span:first-child { font-size: 1.25rem; }
+.notification-center-link strong, .notification-center-link small { display: block; }
+.notification-center-link strong { font-size: .78rem; }
+.notification-center-link small { margin-top: 3px; color: #788da4; font-size: .68rem; }
+.notification-center-link:hover { border-color: #7faed9; box-shadow: 0 5px 13px #31577914; transform: translateY(-2px); color: #1e4c79; }
 @media (prefers-reduced-motion: reduce) { .notification-pulse, .notification-dot { animation: none; } }
+@media (max-width: 700px) { .notification-center { flex-direction: column; gap: 12px; } .notification-center-heading { min-width: 0; } .notification-live-dot { margin-bottom: 5px; } }
 
 .metric-link { display: block; position: relative; text-decoration: none; color: #1e293b; cursor: pointer; transition: background-color .18s, border-color .18s, box-shadow .18s, transform .18s; }
 .metric-link:hover { color: #174f92; background: #edf4fe; border-color: #97b8e4; box-shadow: 0 8px 20px #193c5c12; transform: translateY(-3px); }

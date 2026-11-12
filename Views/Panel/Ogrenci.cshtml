@@ -4,6 +4,15 @@
 <div><span class="eyebrow">STAJ TAKİP SİSTEMİ</span><h1>Merhaba, @Model.Ogrenci.Ad 👋</h1><p>Staj yolculuğunu buradan takip et, çalışmalarını kaydet.</p></div>
 <span class="student-chip">@Model.Ogrenci.Numara · @Model.Ogrenci.Bolum</span>
 </div>
+@if (Model.OkunmamisDuyuruSayisi > 0 || bekleyenOdevVar) {
+<section class="notification-center" aria-label="Yeni bildirimler">
+<div class="notification-center-heading"><span class="notification-live-dot"></span><strong>Yeni işlerin var</strong><small>Panelini kontrol etmeyi unutma.</small></div>
+<div class="notification-center-actions">
+@if (bekleyenOdevVar) { <a asp-controller="OgrenciPanel" asp-action="Odevler" class="notification-center-link"><span>📋</span><span><strong>@Model.Odevler.Count(x => x.TeslimTarihi == null) teslim bekleyen ödev</strong><small>Ödevlerini görüntüle ve teslim et →</small></span></a> }
+@if (Model.OkunmamisDuyuruSayisi > 0) { <a asp-controller="OgrenciPanel" asp-action="Duyurular" class="notification-center-link"><span>📣</span><span><strong>@Model.OkunmamisDuyuruSayisi okunmamış duyuru</strong><small>Son duyuruları oku →</small></span></a> }
+</div>
+</section>
+}
 <div class="row g-3 mb-4">
 <div class="col-12"><div class="d-flex flex-wrap gap-2"><a asp-controller="OgrenciPanel" asp-action="Duyurular" class="btn btn-outline-primary @(Model.OkunmamisDuyuruSayisi > 0 ? "notification-pulse" : "")" aria-label="Duyurular, @Model.OkunmamisDuyuruSayisi okunmamış">Duyurular <span class="badge bg-primary ms-1">@Model.OkunmamisDuyuruSayisi yeni</span></a><a asp-controller="OgrenciPanel" asp-action="Takvim" class="btn btn-outline-secondary">Teslim takvimim →</a></div></div>
 <div class="col-6 col-lg-3"><div class="metric"><span>Firma</span><strong class="metric-text">@(Model.Staj?.FirmaAdi ?? "Henüz eklenmedi")</strong></div></div>
